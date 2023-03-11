@@ -1,0 +1,11 @@
+# Default ignores for project, notebooks and coverage.
+__pychache__
+Notebooks/.ipynb_checkpoints/*
+.idea
+.coverage
+.cumulative
+.single
+
+# Ignore specific Test directories, which hold testing outputs.
+/Tests/.pytest_cache
+/Tests/htmlcov
