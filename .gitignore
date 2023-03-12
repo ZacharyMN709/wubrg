@@ -1,5 +1,6 @@
 # Default ignores for project, notebooks and coverage.
 __pychache__
+*.pyc
 Notebooks/.ipynb_checkpoints/*
 .idea
 .coverage
