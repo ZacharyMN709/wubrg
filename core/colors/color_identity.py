@@ -2,9 +2,10 @@ from __future__ import annotations
 from typing import Iterable, Optional
 from enum import Flag
 
-# region Index Mappings
+from core.colors.color_typing import ColorIdentityString
 
-WUBRG_CI_INDEX_MAP = {
+# region Index Mappings
+WUBRG_CI_INDEX_MAP: [int, int] = {
     0: 0,
     1: 1,
     2: 2,
@@ -39,7 +40,7 @@ WUBRG_CI_INDEX_MAP = {
     31: 31,
 }
 
-PENTAD_CI_INDEX_PATCH = {
+PENTAD_CI_INDEX_PATCH: [int, int] = {
     3: 6,
     6: 7,
     12: 8,
@@ -68,37 +69,53 @@ PENTAD_CI_INDEX_PATCH = {
 
 
 class ColorIdentity(Flag):
+    color_count: int
+    wubrg_idx: int
+    pentad_idx: int
+    deck_idx: int
+
     # region Constructors / Factory Methods
-    def __init__(self, value):
+    def __init__(self, value: int):
         # region Index Generators
-        def get_color_count(val):
+        def get_color_count(val: int) -> int:
+            """Generates the number of colours in the ColorIdentity"""
             count = 0
             while val != 0:
-                if val & 1:
-                    count += 1
+                count += int(val & 1)  # Adds one to the count if the last bit is a 1.
                 val = val >> 1
             return count
 
-        def gen_pentad_order_idx(val):
+        def gen_wubrg_order_idx(val: int) -> int:
+            """Generates the sorting index for wubrg order"""
+            return WUBRG_CI_INDEX_MAP[val]
+
+        def gen_pentad_order_idx(val: int) -> int:
+            """Generates the sorting index for pentad order"""
             if val in PENTAD_CI_INDEX_PATCH:
                 return PENTAD_CI_INDEX_PATCH[val]
             else:
                 return WUBRG_CI_INDEX_MAP[val]
 
-        def gen_deck_order_idx(val):
-            new_val = val - 1
+        def gen_deck_order_idx(val: int) -> int:
+            """Generates the sorting index for deck building order"""
+            new_val = WUBRG_CI_INDEX_MAP[val] - 1
             if new_val < 0:
                 new_val = 31
             return new_val
         # endregion Index Generators
 
         self.color_count = get_color_count(value)
-        self.wubrg_idx = WUBRG_CI_INDEX_MAP[value]
+        self.wubrg_idx = gen_wubrg_order_idx(value)
         self.pentad_idx = gen_pentad_order_idx(value)
-        self.deck_idx = gen_deck_order_idx(self.wubrg_idx)
+        self.deck_idx = gen_deck_order_idx(value)
 
     @classmethod
-    def by_name(cls, name) -> Optional[ColorIdentity]:
+    def by_name(cls, name: str) -> Optional[ColorIdentity]:
+        """
+        Attempts to return a color identity for the provided string.
+        :param name: The name of the colour or color alias.
+        :return: A ColorIdentity matching the string, or None if the string cannot be matched.
+        """
         # If the name is the empty string, count that as colorless.
         if name == '':
             return cls(0)
@@ -300,32 +317,40 @@ class ColorIdentity(Flag):
     # TODO: Consider the naming of these function now that they're part of the object,
     #  and not having the object passed to them.
     def exact(self) -> list[ColorIdentity]:
+        """Returns a list of ColorIdentity which exactly match the ColorIdentity"""
         return [self]
 
     def subset(self) -> list[ColorIdentity]:
+        """Returns a list of ColorIdentity which are in the subset of ColorIdentity"""
         return [ci for ci in ColorIdentity if ci in self]
 
     def superset(self) -> list[ColorIdentity]:
+        """Returns a list of ColorIdentity which are in the superset of ColorIdentity"""
         return [ci for ci in ColorIdentity if self in ci]
 
     def contains(self) -> list[ColorIdentity]:
+        """An alias for `superset`"""
         return self.superset()
 
     def adjacent(self) -> list[ColorIdentity]:
+        """Returns a list of ColorIdentity which are no more than one colour different than ColorIdentity"""
         return [self ^ ci for ci in self.get_color_combinations(0, 1)]
 
     def shares(self) -> list[ColorIdentity]:
+        """Returns a list of ColorIdentity which shares any color with ColorIdentity"""
         return [ci for ci in ColorIdentity if (self & ci)]
     # region Set-Like Operations
 
-    def get_aliases(self) -> list[ColorIdentity]:
+    def get_aliases(self) -> list[str]:
+        """Gets a list of strings, which are aliases or base names for the ColorIdentity"""
         return [k for k, v in self._member_map_.items() if v == self]
 
     def __iter__(self) -> Iterable[ColorIdentity]:
+        """Gets an iterable of the colors contained in the color identity."""
         return iter(ColorIdentity.by_name(c) for c in self.name)
 
-    # TODO: Likely should set up a type for a color string, for completeness-sake.
-    def __str__(self) -> str:
+    def __str__(self) -> ColorIdentityString:
+        """Return the ColorIdentityString of the ColorIdentity."""
         if self.name == 'C':
             return ''
         else:
