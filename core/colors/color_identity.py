@@ -353,8 +353,11 @@ class ColorIdentity(Flag):
         return [ci for ci in ColorIdentity if (self & ci)]
     # endregion Set-Like Operations
 
-    def get_aliases(self) -> list[str]:
+    @property
+    def aliases(self) -> list[ColorAliasString]:
         """Gets a list of strings, which are aliases or base names for the ColorIdentity"""
+        if self == ColorIdentity.C:
+            return ['C', '']
         return [k for k, v in self._member_map_.items() if v == self]
 
     def __iter__(self) -> Iterator[ColorIdentity]:
