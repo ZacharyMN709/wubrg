@@ -53,7 +53,7 @@ ColorCombinationIdentityString = Literal[
     "WUBRG",
 ]
 
-COLOR_ALIAS = Literal[
+ColorAliasString = Literal[
     None, 'None', '',
 
     'White', 'Blue', 'Black', 'Red', 'Green',

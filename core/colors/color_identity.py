@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import Iterator, Optional
+from typing import Iterator, Optional, cast
 from enum import Flag
 
-from core.colors.color_typing import ColorIdentityString
+from core.colors.color_typing import ColorIdentityString, ColorAliasString
 
 # region Index Mappings
 WUBRG_CI_INDEX_MAP: [int, int] = {
@@ -110,27 +110,41 @@ class ColorIdentity(Flag):
         self.deck_idx = gen_deck_order_idx(value)
 
     @classmethod
-    def by_name(cls, name: str) -> Optional[ColorIdentity]:
+    def by_name(cls, name: ColorIdentityString | ColorAliasString) -> ColorIdentity:
+        """
+        Returns a color identity for the provided ColorIdentityString or ColorAlias string.
+        :param name: The ColorIdentityString or ColorAliasString representing the colour.
+        :return: A ColorIdentity matching the string.
+        """
+        # If the name is the empty string, count that as colorless.
+        if name == '':
+            return ColorIdentity.C
+
+        # ColorAlias should inherently exist in the member map.
+        return cls._member_map_[name]
+
+    @classmethod
+    def get(cls, name: str) -> Optional[ColorIdentity]:
         """
         Attempts to return a color identity for the provided string.
         :param name: The name of the colour or color alias.
         :return: A ColorIdentity matching the string, or None if the string cannot be matched.
         """
-        # If the name is the empty string, count that as colorless.
-        if name == '':
-            return cls(0)
 
-        # Check to see if the name is in the member_map, which
-        #  list all of the existing aliases.
-        if name in cls._member_map_:
-            return cls._member_map_[name]
+        # Return any guaranteed checks, if they're applicable.
+        if isinstance(name, ColorIdentityString) or isinstance(name, ColorAliasString):
+            return cls.by_name(cast(ColorIdentityString | ColorAliasString, name))
 
-        # Finally, iterate through the keys and values of the
+        # TODO: Consider adding some sort of color or cost parsing functionality to this.
+
+        # As a last-resort, iterate through the keys and values of the
         #  member_map, using a case-insensitive matching.
         name = name.upper()
         for k, v in cls._member_map_.items():
             if k.upper() == name:
                 return v
+
+        return None
     # endregion Constructors / Factory Methods
 
     # region Enumeration Flags
