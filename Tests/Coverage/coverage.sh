@@ -3,8 +3,8 @@ cd ../..
 
 # Set the variables for which coverage file to output to,
 coverage_type='coverage'
-coverage_file="tests/Coverage/.${coverage_type}"
-html_out="tests/htmlcov/${coverage_type}"
+coverage_file="Tests/Coverage/.${coverage_type}"
+html_out="Tests/htmlcov/${coverage_type}"
 
 # Discover any uni Tests that exist, and run them.
 coverage run --data-file="${coverage_file}" -m unittest discover

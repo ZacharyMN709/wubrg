@@ -6,14 +6,14 @@ module_names=( "$@" )
 
 # Set the variable for which coverage file to output to.
 coverage_type='cumulative'
-coverage_file="tests/Coverage/.${coverage_type}"
-html_out="tests/htmlcov/${coverage_type}"
+coverage_file="Tests/Coverage/.${coverage_type}"
+html_out="Tests/htmlcov/${coverage_type}"
 
 # For each module provided, set the correct test file and run coverage.
 #  If no modules are provided, this step is inherently skipped.
 for module in "${module_names[@]}"
 do
-  test_module="tests/${module}_test/__init__.py"
+  test_module="Tests/test_modules/${module}_test/__init__.py"
   coverage run -a --data-file="${coverage_file}" -m unittest "${test_module}"
 done
 
