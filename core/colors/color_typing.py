@@ -52,3 +52,32 @@ ColorCombinationIdentityString = Literal[
     "UBRG", "UBRGw",
     "WUBRG",
 ]
+
+COLOR_ALIAS = Literal[
+    None, 'None', '',
+
+    'White', 'Blue', 'Black', 'Red', 'Green',
+    'Mono-White', 'Mono-Blue', 'Mono-Black', 'Mono-Red', 'Mono-Green',
+    'Ardenvale', 'Vantress', 'Locthwain', 'Embereth', 'Garenbrig',
+    'Auriok', 'Neurok', 'Moriok', 'Vulshok', 'Sylvok',
+
+    'Azorius', 'Dimir', 'Rakdos', 'Gruul', 'Selesnya',
+    'Ojutai', 'Silumgar', 'Kolaghan', 'Atarka', 'Dromoka',
+
+    'Orzhov', 'Golgari', 'Simic', 'Izzet', 'Boros',
+    'Silverquill', 'Witherbloom', 'Quandrix', 'Prismari', 'Lorehold',
+
+    'Jeskai', 'Sultai', 'Mardu', 'Temur', 'Abzan',
+    'Raugrin', 'Zagoth', 'Savai', 'Ketria', 'Indatha',
+    'Numot', 'Vorosh', 'Oros', 'Intet', 'Teneb',
+    'Raka', 'Ana', 'Dega', 'Ceta', 'Necra',
+
+    'Esper', 'Grixis', 'Jund', 'Naya', 'Bant',
+    'Obscura', 'Maestros', 'Riveteers', 'Cabaretti', 'Brokers',
+
+    'Non-G', 'Non-R', 'Non-B', 'Non-U', 'Non-W',
+    'Yore', 'Witch', 'Ink', 'Dune', 'Glint',
+    'Artifice', 'Growth', 'Altruism', 'Aggression', 'Chaos',
+
+    'WUBRG', 'Any', 'All', '5-Color', 'Five-Color',
+]
