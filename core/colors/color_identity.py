@@ -314,8 +314,6 @@ class ColorIdentity(Flag):
 
     # region Instance Functions
     # region Set-Like Operations
-    # TODO: Consider the naming of these function now that they're part of the object,
-    #  and not having the object passed to them.
     def exact(self) -> list[ColorIdentity]:
         """Returns a list of ColorIdentity which exactly match the ColorIdentity"""
         return [self]
@@ -339,7 +337,7 @@ class ColorIdentity(Flag):
     def shares(self) -> list[ColorIdentity]:
         """Returns a list of ColorIdentity which shares any color with ColorIdentity"""
         return [ci for ci in ColorIdentity if (self & ci)]
-    # region Set-Like Operations
+    # endregion Set-Like Operations
 
     def get_aliases(self) -> list[str]:
         """Gets a list of strings, which are aliases or base names for the ColorIdentity"""
