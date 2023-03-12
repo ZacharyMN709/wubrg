@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable, Optional
+from typing import Iterator, Optional
 from enum import Flag
 
 from core.colors.color_typing import ColorIdentityString
@@ -345,7 +345,7 @@ class ColorIdentity(Flag):
         """Gets a list of strings, which are aliases or base names for the ColorIdentity"""
         return [k for k, v in self._member_map_.items() if v == self]
 
-    def __iter__(self) -> Iterable[ColorIdentity]:
+    def __iter__(self) -> Iterator[ColorIdentity]:
         """Gets an iterable of the colors contained in the color identity."""
         return iter(ColorIdentity.by_name(c) for c in self.name)
 
