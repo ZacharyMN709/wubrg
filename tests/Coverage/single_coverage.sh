@@ -7,23 +7,25 @@ file_name=$2
 
 # Set the variables for which coverage file to output to,
 #  and which module to display code for.
-coverage_file='Tests/Coverage/.single'
+coverage_type='single'
+coverage_file="tests/Coverage/.${coverage_type}"
 target_module="core/${module_name}/*"
+html_out="tests/htmlcov/${coverage_type}"
 
 # Choose the file or module to test based on if a filename exists.
 if [ -n "${file_name}" ]; then
-  to_test="Tests/${module_name}_Test/${file_name}_Test.py"
-  test_log="Tests/${module_name}_Test/${file_name}_Test.py"
+  to_test="tests/${module_name}_test/${file_name}_test.py"
+  test_log="tests/${module_name}_test/${file_name}_test.py"
 else
-  to_test="Tests/${module_name}_Test/__init__.py"
-  test_log="Tests/${module_name}_Test/*"
+  to_test="tests/${module_name}_test/__init__.py"
+  test_log="tests/${module_name}_test/*"
 fi
 
 # Run the coverage program, only if a module was defined.
 if [ -n "${module_name}" ]; then
   coverage run --data-file="${coverage_file}" -m unittest "${to_test}"
   # TODO: Try and isolate only the file, and not the whole module, when file is provided.
-  coverage html --data-file="${coverage_file}" --include="${target_module}","${test_log}"
+  coverage html --data-file="${coverage_file}" --include="${target_module}","${test_log}"  --directory="${html_out}"
 fi
 
 exit
