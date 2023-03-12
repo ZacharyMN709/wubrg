@@ -143,7 +143,7 @@ def main():
     type_file_text = gen_type_file_text(rules_dict)
     file_name = "card_types.py"
     cur_dir = os.path.split(__file__)[0]
-    target_path = os.path.join(cur_dir, '../..', file_name)
+    target_path = os.path.join(cur_dir, '..', file_name)
     with open(target_path, 'w') as f:
         f.write(type_file_text)
 
