@@ -326,32 +326,33 @@ class ColorIdentity(Flag):
         return cls.get_color_combinations(1, 1)
     # endregion Class Functions
 
-    # region Instance Functions
-    # region Set-Like Operations
+    # region Instance Functions / Properties
+    # region Set-Like Properties
+    @property
     def exact(self) -> list[ColorIdentity]:
         """Returns a list of ColorIdentity which exactly match the ColorIdentity"""
         return [self]
 
+    @property
     def subset(self) -> list[ColorIdentity]:
-        """Returns a list of ColorIdentity which are in the subset of ColorIdentity"""
+        """Returns a list of ColorIdentity which are a non-strict subset of ColorIdentity"""
         return [ci for ci in ColorIdentity if ci in self]
 
+    @property
     def superset(self) -> list[ColorIdentity]:
-        """Returns a list of ColorIdentity which are in the superset of ColorIdentity"""
+        """Returns a list of ColorIdentity which are a non-strict superset of ColorIdentity"""
         return [ci for ci in ColorIdentity if self in ci]
 
-    def contains(self) -> list[ColorIdentity]:
-        """An alias for `superset`"""
-        return self.superset()
-
+    @property
     def adjacent(self) -> list[ColorIdentity]:
         """Returns a list of ColorIdentity which are no more than one colour different than ColorIdentity"""
         return [self ^ ci for ci in self.get_color_combinations(0, 1)]
 
+    @property
     def shares(self) -> list[ColorIdentity]:
         """Returns a list of ColorIdentity which shares any color with ColorIdentity"""
         return [ci for ci in ColorIdentity if (self & ci)]
-    # endregion Set-Like Operations
+    # endregion Set-Like Properties
 
     @property
     def aliases(self) -> list[ColorAliasString]:
@@ -370,4 +371,4 @@ class ColorIdentity(Flag):
             return ''
         else:
             return self.name
-    # endregion Instance Functions
+    # endregion Instance Functions / Properties
